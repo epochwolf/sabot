@@ -55,6 +55,12 @@ function Connection:send_raw(str)
   return true
 end
 
+--[[ IRC Commands
+These are raw methods, they do no special checking on input. 
+For example send_message does not check for valid length.
+It is recommended that you use the methods in bot.lua instead. 
+--]] 
+
 function Connection:send_nick(nick)
   return self:send(string.format("NICK %s", nick))
 end
@@ -69,6 +75,18 @@ end
 
 function Connection:send_pong(server)
   return self:send("PONG " .. server)
+end
+
+function Connection:send_message(chan, message)
+  return self:send(string.format("PRIVMSG %s :%s", chan, message))
+end
+
+function Connection:send_join(chan)
+  return self:send("JOIN " .. chan)
+end
+
+function Connection:send_part(chan)
+  return self:send("PART " .. chan)
 end
 
 function Connection:receive() 
@@ -92,7 +110,7 @@ function Connection:receive_data(data)
 end
 
 function Connection:handle_ping(data)
-  local command, param = strmatch(data, "^:?([^:]+ ):?(.+)")
+  local command, param = string.match(data, "^:?([^:]+ ):?(.+)")
   self.last_ping = os.time()
   if last_ping and os.time() - lastPing > 600 then
     cprint("red", "Warning: Latency > 600ms")
