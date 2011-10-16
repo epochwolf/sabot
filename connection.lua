@@ -92,12 +92,20 @@ function Connection:send_message(chan, message)
   return self:send(string.format("PRIVMSG %s :%s", chan, message))
 end
 
-function Connection:send_join(chan)
-  return self:send("JOIN " .. chan)
+--[[ Join channels
+params: variable amount of channel names
+--]]
+function Connection:join(...)
+  if(#arg == 0) then return end
+  return self:send("JOIN " .. table.concat(arg, ","))
 end
 
-function Connection:send_part(chan)
-  return self:send("PART " .. chan)
+--[[ Part channels
+params: variable amount of channel names
+--]]
+function Connection:part(...)
+  if(#arg == 0) then return end
+  return self:send("PART " .. table.concat(arg, ","))
 end
 
 function Connection:receive() 
