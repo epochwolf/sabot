@@ -3,10 +3,9 @@ require "./util"
 
 print "Loading bot 0.1"
 
-connection = Connection:new(Connections[freenode])
-
-cprint("yellow", "Host: " .. connection.host)
-cprint("yellow", "Port: " .. connection.port)
+connection = Connection:new()
+connection:activate_socket_debugging()
+--connection:activate_event_tracing()
 
 success, errors = connection:open()
 
