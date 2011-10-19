@@ -1,13 +1,14 @@
-require "./connection"
-require "./util"
+require "bot"
+require "util"
 
 print "Loading bot 0.1"
 
-connection = Connection:new()
+bot = Bot:new()
+connection = bot.connection
 connection:activate_socket_debugging()
 --connection:activate_event_tracing()
 
-success, errors = connection:open()
+success, errors = connection:open("irc.freenode.net", "6667")
 
 if success then
   connection:handshake("epochwolf|bot")
