@@ -27,6 +27,12 @@ function string:split(sSeparator, nMax, bRegexp)
   return aRecord
 end
 
+function parse_nick(nick)
+  local bang_pos = nick:find('!')
+  local at_pos = nick:find('@')
+  return nick:sub(1, bang_pos - 1), nick:sub(bang_pos + 1, at_pos - 1), nick:sub(at_pos + 1)
+end
+
 
 function shallow_copy_table(original_table)
   local new_table = {}
