@@ -1,1 +1,5 @@
 An IRC bot written in Lua. This is a personal project. This file will be updated at a later date if the project becomes useful.
+
+# Rocks required
+- luasocket
+- luafilesystem
