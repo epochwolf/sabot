@@ -192,7 +192,7 @@ function Connection:receive_data(str)
       self:auto_join()
     elseif tokens[2] == "JOIN" then self:event("join", tokens[3], parse_nick(tokens[1])) -- [3] channel, [1] nick!user@host
     elseif tokens[2] == "332"  then self:event("topic", tokens[4], after_colon) -- [4] is channel
-    elseif tokens[2] == "353"  then self:event("names", tokens[4], after_colon:split(" ")) -- [4] channel, after_colon: nicks
+    elseif tokens[2] == "353"  then self:event("names", tokens[4], after_colon) -- [4] channel, after_colon: nicks
     elseif tokens[2] == "366"  then self:event("end_of_names")
     
     -- Error Packets  
@@ -225,6 +225,7 @@ function Connection:receive_data(str)
   else
     self:event("invalid_packet", str) --as far as this bot is concerned
   end
+  self.manager:_fire_delayed_funcs()
   return
 end
 

@@ -15,6 +15,7 @@ function Bot:new(config)
   o.nicks = {}
   o.config = config
   o.nick = nil
+  o.delayed_funcs = {}
   o.manager = BotManager:new(o)
   o.connection = Connection:new(config, o.manager)
   o.plugin_manager = PluginManager:new(o)
@@ -38,6 +39,13 @@ end
 
 function Bot:in_channel(channel)
   return self.channels[channel]
+end
+
+-- used to run a command after all events have been finished
+-- useful for modifying plugin and event data. It's a but unsafe to do so
+-- in an event
+function Bot:set_delayed_func(func)
+  self.delayed_funcs[#self.delayed_funcs + 1] = func
 end
 
 --Convience methods

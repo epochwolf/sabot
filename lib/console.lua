@@ -1,5 +1,4 @@
 local print = print
-local traceback = debug.traceback
 local Console = {}
 
 -- xterm 16 color codes, source: wikipedia
@@ -34,7 +33,7 @@ end
 
 function Console.error(err)
   Console.log("bold_red", "ERROR: "..err)
-  Console.log(traceback())
+  Console.log(debug.traceback())
 end
 
 function Console.color(color, message)

@@ -1,5 +1,6 @@
 local Channel = require 'lib/channel'
 local Nick = require 'lib/nick'
+local console = require 'lib/console'
 
 local BotManager = {}
 
@@ -59,6 +60,14 @@ end
 function BotManager:set_topic(channel, topic)
   channel = self:create_channel(channel)
   channel.set_topic(topic)
+end
+
+function BotManager:_fire_delayed_funcs()
+  if 0 == #self.bot.delayed_funcs then return end
+  for i, f in ipairs(self.bot.delayed_funcs) do
+    xpcall(f, console.error)
+  end
+  self.bot.delayed_funcs = {}
 end
 
 return BotManager

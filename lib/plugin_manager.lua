@@ -18,6 +18,7 @@ function PluginManager:new(bot)
 end
 
 function PluginManager:load()
+  print("Loading all plugins")
   for file in lfs.dir('./plugins') do
     local name, ext = unpack(split(file, '.'))
     if ext == "lua" then 
@@ -29,6 +30,16 @@ function PluginManager:load()
       end
     end
   end
+end
+
+function PluginManager:reload()
+  print("Unbinding all plugins")
+  for name, plugin in pairs(self.plugins) do
+    print("Unbinding plugin: "..name)
+    plugin:_unbind_all()
+  end
+  self.plugins = {}
+  self:load()
 end
 
 return PluginManager

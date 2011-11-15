@@ -4,7 +4,7 @@ local setmetatable = setmetatable
 local assert = assert
 local unpack = unpack
 local xpcall = xpcall
-local print_error = console.print_error
+local print_error = console.error
 local pairs, ipairs = pairs, ipairs
 local split = string.split
 
@@ -41,6 +41,7 @@ end
 function Events:unbind(name_list, func)
   assert(name_list)
   assert(func)
+  print("Unbinding: " .. name_list)
   local names = split(name_list, '|')
   for i, name in ipairs(names) do
     local e = self.event_table[name] or {}
