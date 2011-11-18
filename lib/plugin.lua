@@ -9,17 +9,20 @@ local Plugin = {
   code = function() end,
 }
 
-function Plugin:new(bot, code)
-  assert(bot)
+function Plugin:new(api, code)
+  assert(api)
   assert(code)
   local o = {}
   setmetatable(o, self)
   self.__index = self
-  o.bot = bot
+  o.api = api
+  o.bot = api.bot
   o.code = code
+  o.commands = {}
+  o.command_help = {}
   o.bindings = {}
   -- execute plugin code
-  plugin_env = {bot = o.bot, plugin = o}
+  local plugin_env = {bot = o.bot, plugin = o, console = console, api = o.api}
   setmetatable(plugin_env, {__index = _G})
   setfenv(o.code, plugin_env)
   o.code()
@@ -28,7 +31,14 @@ function Plugin:new(bot, code)
 end
 
 function Plugin:command(name, func)
+  assert(name) 
+  assert(func)
+  self.commands[name] = true
   self:bind("command:"..name, func)
+end
+
+function Plugin:cmdhelp(name, help_str)
+  self.command_help[name] = help_str
 end
 
 function Plugin:bind(event, func)
@@ -52,6 +62,8 @@ function Plugin:_unbind_all()
       self:unbind(event, func)
     end
   end
+  self.commands = {}
+  self.command_help = {}
   self.bindings = {}
 end
 

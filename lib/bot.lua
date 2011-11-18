@@ -37,8 +37,12 @@ function Bot:enable_debugging()
   self.connection:activate_event_tracing()
 end
 
-function Bot:in_channel(channel)
-  return self.channels[channel]
+function Bot:nick_is_admin(nick)
+  if self.config.admins[nick] then
+    return true
+  else
+    return false
+  end
 end
 
 -- used to run a command after all events have been finished
@@ -46,32 +50,6 @@ end
 -- in an event
 function Bot:set_delayed_func(func)
   self.delayed_funcs[#self.delayed_funcs + 1] = func
-end
-
---Convience methods
-
-function Bot:msg(channel, message)
-  assert(channel)
-  assert(message)
-  self.connection:send_privmsg(channel, message)
-end
-
-function Bot:join(channel)
-  if not self:in_channel(channel) then 
-    self.connection:send_join(channel)
-    return true
-  else
-    return false
-  end
-end
-
-function Bot:part(channel, reason)
-  if self:in_channel(channel) then 
-    self.connection:send_part(channel, reason)
-    return true
-  else
-    return false
-  end
 end
 
 return Bot

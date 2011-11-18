@@ -1,5 +1,6 @@
 local Channel = {}
 local substr = string.substr
+local strfind = string.find
 
 --instance variables
 Channel.name = ""
@@ -53,6 +54,14 @@ end
 
 function Channel:part()
   self.bot.connection.part(self.name)
+end
+
+function Channel.is_channel(channel)
+  if strfind(channel, "^[#&+!]#?") then 
+    return true
+  else
+    return false
+  end
 end
 
 return Channel

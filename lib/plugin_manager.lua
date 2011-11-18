@@ -2,6 +2,7 @@ require "luarocks.loader"
 require 'lib/util'
 local lfs = require 'lfs'
 local Plugin = require 'lib/plugin'
+local PluginApi = require 'lib/plugin_api'
 local error = error
 local unpack = unpack
 local split = string.split
@@ -14,6 +15,8 @@ function PluginManager:new(bot)
   self.__index = self
   o.bot = bot
   o.plugins = {}
+  o.api = PluginApi:new(bot)
+  o.env = {api = api, }
   return o
 end
 
@@ -26,7 +29,7 @@ function PluginManager:load()
       if err then 
         error(err) 
       else
-        self.plugins[name] = Plugin:new(self.bot, func)
+        self.plugins[name] = Plugin:new(self.api, func)
       end
     end
   end

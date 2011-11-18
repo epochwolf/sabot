@@ -16,6 +16,14 @@ function BotManager:new(bot)
   return o
 end
 
+function BotManager:get_bot_nick(nick)
+  return self.bot.nick
+end
+
+function BotManager:set_bot_nick(nick)
+  self.bot.nick = nick
+end
+
 function BotManager:get_channel(channel)
   if not self.channels[channel] then 
     self.channels[channel] = Channel:new(channel)

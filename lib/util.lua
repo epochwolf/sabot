@@ -7,7 +7,7 @@ Utility functions, language extensions used throughout the code.
 --Source: http://lua-users.org/wiki/SplitJoin
 
 --major, minor, build
-BOT_VERSION = {0, 2, 0}
+BOT_VERSION = {0, 2, 1}
 
 
 

@@ -132,6 +132,10 @@ function Connection:send_privmsg(chan, message)
   return self:send(strformat("PRIVMSG %s :%s", chan, message))
 end
 
+function Connection:send_action(chan, message)
+  return self:send(strformat("PRIVMSG %s :\001ACTION %s", chan, message.."\001"))
+end
+
 --[[ Join channels
 params: variable amount of channel names
 --]]
@@ -173,8 +177,8 @@ function Connection:receive_data(str)
     if tokens[2] == "PRIVMSG" then 
       local channel = tokens[3]
       local nick = parse_nick(tokens[1])
-      if after_colon:sub(1, 6) == "ACTION" then 
-        self:event("privmsg:action", channel, nick, after_colon:sub(8))
+      if after_colon:sub(1, 7) == "\001ACTION" then 
+        self:event("privmsg:action", channel, nick, after_colon:sub(9, #after_colon - 1))
       else
         self:event("privmsg", channel, nick, after_colon)
         local command_char = self.config.command_char
@@ -202,7 +206,7 @@ function Connection:receive_data(str)
     elseif tokens[2] == "437"  then -- netsplit timeouts in effect...
       if tokens[4].sub(1, 1).match("^[#%%&+]") then self:event("channel_unavailable", tokens[4])  -- [4] is channel
       else self:event("nick_unavailable", tokens[4]) end  -- [4] is nick
-    -- :epochwolf|air!~epochwolf@c-76-22-116-27.hsd1.wa.comcast.net PRIVMSG #voidptr :ACTION hugs sabot_lua_bot
+    -- :epochwolf|air!~epochwolf@c-76-22-116-27.hsd1.wa.comcast.net PRIVMSG ##sabot_lua_bot :ACTION hugs sabot_lua_bot
       
       
     --elseif 

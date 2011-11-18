@@ -36,6 +36,11 @@ function Console.error(err)
   Console.log(debug.traceback())
 end
 
+function Console.print_error(err)
+  Console.log("bold_yellow", "WARNING: using unsupported function.")
+  Console.error(err)
+end
+
 function Console.color(color, message)
   local colors = Console.xterm_color
   if colors[color] then color = colors[color] end --allow colors by code or name
